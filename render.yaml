@@ -1,7 +1,15 @@
 services:
   - type: web
-    name: fake-news-detector
+    name: streamlit-app
     env: python
-    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
-    startCommand: streamlit run app.py --server.port $PORT --server.address 0.0.0.0
-    pythonVersion: 3.10
+    plan: free
+    buildCommand: |
+      pip install --upgrade pip setuptools wheel
+      pip install -r requirements.txt
+    startCommand: |
+      python -m streamlit run app.py --server.port $PORT --server.address 0.0.0.0
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+    healthCheckPath: /
+    autoDeploy: true
